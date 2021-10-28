@@ -1,5 +1,5 @@
 import { Button, Grid } from '@mui/material'
-import { useRef, useState, useEffect } from 'react'
+import {  useState, useEffect } from 'react'
 import Flippy, { FrontSide, BackSide } from 'react-flippy'
 
 function App() {
@@ -25,13 +25,10 @@ function App() {
     }
     return arr
   }
-  const ref = useRef()
   const [openendCard, setOpenedCard] = useState([])
-  const [bool,setBool] = useState(false)
   const [arr, setArr] = useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
   const [tempArray, setTempArray] = useState(() => randomize(arr.concat(arr)))
   const [played, setPlayed] = useState(0)
-  // const [isFlipped, setIsFlipped] = useState(false)
   const [matched, setMatched] = useState([])
   const [moves, setMoves] = useState(0)
   function flipCard(index, element) {
@@ -42,10 +39,9 @@ function App() {
     if (openendCard < 4) return
     const firstMatched = openendCard[1]
     const secondMatched = openendCard[3]
-    // console.log(`firstMatched: ${firstMatched} secondMatched: ${secondMatched}`)
     if (firstMatched === secondMatched) {
+      if (!matched.includes(firstMatched)) 
       setMatched([...matched, firstMatched])
-      console.log(`matched: ${matched}`)
     }
     if (openendCard.length === 4) setTimeout(() => setOpenedCard([]), 500)
 
@@ -53,16 +49,17 @@ function App() {
   const handleClick = () => {
     setMoves(moves => moves += 1)
   }
-  if (matched.length >= 8) {
-    for (let value of arr){
-      if (matched.find(e => e == value) === -1) {setBool(false);break}
-      else {setBool(true); continue}
-    }
-    bool == true && alert("You've won!") 
+  if (matched.length === 8){
+    alert("Congratulations you've won")
+    setMatched([])
+    setTempArray(() => randomize(arr.concat(arr)))
+    console.log(tempArray)
+    setMoves(0)
+    setPlayed(prev => prev+=1)
   }
   return (
     <>
-      {bool && (<Grid container><Grid item><h1>You've WON</h1></Grid></Grid>)}
+      {/* {bool && (<Grid container><Grid item><h1>You've WON</h1></Grid></Grid>)} */}
       <Grid container>
         <Grid item xs={6}>
           <h3>Moves : {moves}</h3>
